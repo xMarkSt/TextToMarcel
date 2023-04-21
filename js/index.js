@@ -1,26 +1,29 @@
-import Crunker from './crunker.esm.js';
-
 const talkBtn = document.querySelector("#praat");
 const talkInput = document.querySelector("#talkInput");
-let crunker = new Crunker();
 
-talkBtn.addEventListener('click', playAudio);
+talkBtn.addEventListener('click', playAudios);
 talkInput.addEventListener('keyup', (event) => {
     event.preventDefault();
     if(event.keyCode === 13) {
-        playAudio();
+        playAudios();
     }
 });
 
+let queue = [];
+
+function playAudios() {
+    let values = talkInput.value.split(" ");
+    for (let value of values) {
+        queue.push(`https://commons.wikimedia.org/wiki/Special:FilePath/nl-${value}.ogg`);
+    }
+    console.log(queue);
+    playAudio();
+}
 function playAudio() {
-    let url = `https://commons.wikimedia.org/wiki/Special:FilePath/nl-${talkInput.value}.ogg`;
-    let soep = "https://commons.wikimedia.org/wiki/Special:FilePath/nl-soep.ogg";
-    let kip = "https://commons.wikimedia.org/wiki/Special:FilePath/nl-kip.ogg";
-    crunker.fetchAudio(soep, kip)
-        .then((buffers) => crunker.mergeAudio(buffers))
-        .then((merged) => crunker.export(merged, 'audio/mp3'))
-        .then((output) => crunker.play(output.blob))
-        .catch((error) => {
-            throw new Error(error);
-        });
+    if(queue.length === 0) return;
+    let audio = new Audio(queue.shift());
+    audio.play().catch((error) => {
+        console.log("Mislukt...");
+    });
+    audio.onended = playAudio;
 }
