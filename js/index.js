@@ -4,6 +4,7 @@ const talkInput = document.querySelector("#talkInput");
 talkBtn.addEventListener('click', playAudios);
 talkInput.addEventListener('keyup', (event) => {
     event.preventDefault();
+    // Enter key
     if(event.keyCode === 13) {
         playAudios();
     }
@@ -17,7 +18,6 @@ function playAudios() {
     for (let word of words) {
         queue.push(word.toLowerCase());
     }
-    console.log(queue);
     playNext();
 }
 function playNext() {
