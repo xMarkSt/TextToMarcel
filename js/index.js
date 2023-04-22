@@ -42,6 +42,7 @@ function playSound(word, retry = true) {
             // We stop after one retry
             playSound(word, false);
         } else {
+            console.log("Failed")
             talkInput.classList.add("is-invalid");
             alertBox = document.querySelector("#alert");
             alertClone = alertBox.cloneNode(true);
