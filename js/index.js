@@ -12,18 +12,35 @@ talkInput.addEventListener('keyup', (event) => {
 let queue = [];
 
 function playAudios() {
-    let values = talkInput.value.split(" ");
-    for (let value of values) {
-        queue.push(`https://commons.wikimedia.org/wiki/Special:FilePath/nl-${value}.ogg`);
+    // Fill queue with words
+    let words = talkInput.value.split(" ");
+    for (let word of words) {
+        queue.push(word.toLowerCase());
     }
     console.log(queue);
-    playAudio();
+    playNext();
 }
-function playAudio() {
+function playNext() {
     if(queue.length === 0) return;
-    let audio = new Audio(queue.shift());
+
+    playSound(queue[0]);
+
+    // Remove sound that was just played from queue
+    queue.shift();
+}
+
+function playSound(word, retry = true) {
+    let audio = new Audio(`https://commons.wikimedia.org/wiki/Special:FilePath/nl-${word}.ogg`);
     audio.play().catch((error) => {
-        console.log("Mislukt...");
+        if(retry) {
+            console.log("Retry...");
+            // Make first letter uppercase and retry
+            word = word.charAt(0).toUpperCase() + word.slice(1);
+            // We stop after one retry
+            playSound(word, false);
+        }
     });
-    audio.onended = playAudio;
+
+    // Play next audio
+    audio.onended = playNext;
 }
