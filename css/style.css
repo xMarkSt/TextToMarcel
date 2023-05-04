@@ -14,3 +14,13 @@
     margin-bottom: 16px;
     width: 100%;
 }
+
+#veranderkleurtjes {
+    position: fixed;
+    bottom: 0;
+    margin-bottom: 16px;
+
+    /* And if you want the div to be full-width: */
+    left: 0;
+    right: 0;
+}
