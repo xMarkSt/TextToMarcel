@@ -1,5 +1,7 @@
 const talkBtn = document.querySelector("#praat");
 const talkInput = document.querySelector("#talkInput");
+const kleurtjesBtn = document.querySelector('#veranderkleurtjes');
+
 let alertBox;
 let alertClone;
 talkBtn.addEventListener('click', playAudios);
@@ -10,6 +12,8 @@ talkInput.addEventListener('keyup', (event) => {
         playAudios();
     }
 });
+
+kleurtjesBtn.addEventListener('click', toggleDarkMode);
 
 let queue = [];
 
@@ -64,3 +68,19 @@ function playSound(word, retry = true) {
 $('#alert').on('close.bs.alert', function () {
     alertBox = alertClone;
 })
+
+
+function toggleDarkMode() {
+    if (document.documentElement.getAttribute('data-bs-theme') === 'dark') {
+        // Set light mode
+        document.documentElement.setAttribute('data-bs-theme', 'light')
+        // Change button text
+        kleurtjesBtn.value = "Ik wil donkere kleurtjes";
+    }
+    else {
+        // Set dark mode
+        document.documentElement.setAttribute('data-bs-theme', 'dark')
+        // Change button text
+        kleurtjesBtn.value = "Ik wil lichtere kleurtjes";
+    }
+}
