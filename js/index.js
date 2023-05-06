@@ -1,22 +1,33 @@
+// *---------- Page elements ----------*
 const talkBtn = document.querySelector("#praat");
 const talkInput = document.querySelector("#talkInput");
-const kleurtjesBtn = document.querySelector('#veranderkleurtjes');
+const toggleColorThemeBtn = document.querySelector('#veranderkleurtjes');
 
 let alertBox;
 let alertClone;
+
+// *---------- Event listeners ----------*
 talkBtn.addEventListener('click', playAudios);
 talkInput.addEventListener('keyup', (event) => {
     event.preventDefault();
     // Enter key
-    if(event.keyCode === 13) {
+    if (event.keyCode === 13) {
         playAudios();
     }
 });
+toggleColorThemeBtn.addEventListener('click', toggleColorTheme);
 
-kleurtjesBtn.addEventListener('click', toggleDarkMode);
-
+// *---------- Other variables ----------*
 let queue = [];
 
+// *---------- Load preferences ----------*
+if (localStorage.getItem("colorTheme") === "dark") {
+    setDarkColorTheme();
+} else {
+    setLightColorTheme();
+}
+
+// *---------- Functions ----------*
 function playAudios() {
     talkInput.classList.remove("is-invalid");
 
@@ -27,8 +38,9 @@ function playAudios() {
     }
     playNext();
 }
+
 function playNext() {
-    if(queue.length === 0) return;
+    if (queue.length === 0) return;
 
     playSound(queue[0]);
 
@@ -39,7 +51,7 @@ function playNext() {
 function playSound(word, retry = true) {
     let audio = new Audio(`https://commons.wikimedia.org/wiki/Special:FilePath/nl-${word}.ogg`);
     audio.play().catch(() => {
-        if(retry) {
+        if (retry) {
             console.log("Retry...");
             // Make first letter uppercase and retry
             word = word.charAt(0).toUpperCase() + word.slice(1);
@@ -69,18 +81,31 @@ $('#alert').on('close.bs.alert', function () {
     alertBox = alertClone;
 })
 
-
-function toggleDarkMode() {
+function toggleColorTheme() {
+    // If dark mode is active
     if (document.documentElement.getAttribute('data-bs-theme') === 'dark') {
-        // Set light mode
-        document.documentElement.setAttribute('data-bs-theme', 'light')
-        // Change button text
-        kleurtjesBtn.value = "Ik wil donkere kleurtjes";
+        // Set light color theme
+        setLightColorTheme();
+
+        // Store theme preference in local storage
+        localStorage.setItem("colorTheme", "light");
     }
+    // If light mode is active
     else {
-        // Set dark mode
-        document.documentElement.setAttribute('data-bs-theme', 'dark')
-        // Change button text
-        kleurtjesBtn.value = "Ik wil lichtere kleurtjes";
+        // Set dark color theme
+        setDarkColorTheme();
+
+        // Store theme preference in local storage
+        localStorage.setItem("colorTheme", "dark");
     }
+}
+
+function setDarkColorTheme() {
+    document.documentElement.setAttribute('data-bs-theme', 'dark');
+    toggleColorThemeBtn.value = "Ik wil lichtere kleurtjes";
+}
+
+function setLightColorTheme() {
+    document.documentElement.setAttribute('data-bs-theme', 'light');
+    toggleColorThemeBtn.value = "Ik wil donkere kleurtjes";
 }
