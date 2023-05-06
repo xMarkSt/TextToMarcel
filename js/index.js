@@ -31,8 +31,11 @@ if (localStorage.getItem("colorTheme") === "dark") {
 function playAudios() {
     talkInput.classList.remove("is-invalid");
 
-    // Fill queue with words
-    let words = talkInput.value.split(" ");
+    // Fill queue with words, remove special characters and split at spaces
+    let words = talkInput.value
+        .replace(/[^a-z\d\s]+/gi, "")
+        .split(" ");
+
     for (let word of words) {
         queue.push(word.toLowerCase());
     }
