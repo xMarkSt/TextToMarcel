@@ -33,7 +33,11 @@ function playAudios() {
 
     // Fill queue with words, remove special characters and split at spaces
     let words = talkInput.value
-        .replace(/[^a-z\d\s]+/gi, "")
+        .replaceAll('.', '')
+        .replaceAll(',', '')
+        .replaceAll('!', '')
+        .replaceAll('?', '')
+        .replaceAll(':', '')
         .split(" ");
 
     for (let word of words) {
